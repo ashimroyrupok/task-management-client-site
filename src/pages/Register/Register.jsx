@@ -1,10 +1,21 @@
-import  { useState } from "react";
+import  { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 // react icons
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import  { AuthContext } from "../../provider/AuthProvider/AuthProvider";
+
+
+const api_key = import.meta.env.VITE_IMAGE_API_KEY;
+const hosting_api = `https://api.imgbb.com/1/upload?key=${api_key}`;
 
 const Register = () => {
   const [visible, setVisible] = useState(false);
+
+  const { signIn } = useContext(AuthContext)
+  console.log(signIn);
+
+
+
   const submitForm= e => {
     e.preventDefault()
     const form = e.target;
@@ -14,6 +25,16 @@ const Register = () => {
     const bio = form.bio.value;
     const img= form.img.files[0]
     console.log(name,email,password,bio,img);
+
+    // 
+
+    signIn(email,password)
+    .then(res => {
+        console.log(res);
+    })
+    .catch(err => {
+       console.log(err.message);
+    })
 
   }
   return (
@@ -121,7 +142,12 @@ const Register = () => {
                 >
                   Image
                 </label>
-                <input className="border-2 w-full " type="file" name="img" id="" />
+                <input
+                  className="border-2 w-full "
+                  type="file"
+                  name="img"
+                  id=""
+                />
               </div>
 
               <div>
@@ -132,27 +158,15 @@ const Register = () => {
                   Submit
                 </button>
 
-                {/* toast message */}
-                {/* <ToastContainer
-                  position="top-right"
-                  autoClose={2000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover={false}
-                  theme="light"
-                /> */}
+    
               </div>
               <div className="flex">
                 <h4>Already have an account?</h4>
                 <Link
                   to="/login"
-                  className="text-blue-600 pl-2 dark:text-[#6689CC]"
+                  className="text-[#025287] pl-2 dark:text-[#6689CC]"
                 >
-                  Sign in
+                  Login
                 </Link>
               </div>
             </form>

@@ -63,13 +63,13 @@ const Navbar = () => {
       </div>
       <div className="navbar-end pr-6">
         <div className="flex justify-between items-center gap-2">
-          <a
+          <Link to={'/login'}
             href=""
             className="btn text-white border-2 border-[#021745] hover:text-white hover:bg-[#021745] btn-outline"
           >
             {" "}
             Login <CiLogin className="text-2xl font-extrabold  "></CiLogin>{" "}
-          </a>
+          </Link>
           <Link
             to={"/register"}
             href=""
