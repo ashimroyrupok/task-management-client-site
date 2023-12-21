@@ -4,6 +4,7 @@ import { FaPlus } from "react-icons/fa6";
 
 import { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider/AuthProvider";
+import MakeTask from "../../components/MakeTask/MakeTask";
 
 const Dashboard = () => {
     const {user} = useContext(AuthContext)
@@ -162,11 +163,33 @@ const Dashboard = () => {
           <div>
             <div className="flex  gap-4 border-b px-10 pb-6 items-center">
               <div className="w-[80%] ">
-                <div className=" hidden text-center lg:block relative">
-                  <h2 className="btn btn-outline text-center">
-                    {" "}
-                    <FaPlus /> Add New Task
-                  </h2>
+                <div className="  text-center lg:block relative">
+                  {/* Open the modal using document.getElementById('ID').showModal() method */}
+                  <button
+                    className=""
+                    onClick={() =>
+                      document.getElementById("my_modal_5").showModal()
+                    }
+                  >
+                    <h2 className="btn btn-outline text-center">
+                      {" "}
+                      <FaPlus /> Add New Task
+                    </h2>
+                  </button>
+                  <dialog
+                    id="my_modal_5"
+                    className="modal modal-bottom sm:modal-middle"
+                  >
+                    <div className="modal-box">
+                      <MakeTask></MakeTask>
+                      <div className="modal-action">
+                        <form method="dialog">
+                          {/* if there is a button in form, it will close the modal */}
+                          <button className="btn">Close</button>
+                        </form>
+                      </div>
+                    </div>
+                  </dialog>
                 </div>
               </div>
               <div className="flex gap-4 items-center justify-end lg:w-[20%]">
