@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Banner = () => {
   return (
     <div className="h-screen w-full bg-transparent">
@@ -15,9 +17,9 @@ const Banner = () => {
                 task
               </p>
 
-              <button className="btn bg-[#021745]  px-10 py-4 hover:text-black text-white mt-8">
+              <Link to={'/dashboard'}  className="btn bg-[#021745]  px-10 py-4 hover:text-black text-white mt-8">
                 Lets Explore
-              </button>
+              </Link>
             </div>
           </div>
         </div>

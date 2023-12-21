@@ -1,10 +1,11 @@
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider/AuthProvider";
 import { toast } from "react-toastify";
 
 const Login = () => {
-    const {login} = useContext(AuthContext);
+    const { login, googleLogin } = useContext(AuthContext);
+    const location = useLocation()
     const navigate = useNavigate()
     const handleForm = e => {
         e.preventDefault()
@@ -17,13 +18,27 @@ const Login = () => {
         .then(res => {
             console.log(res.data);
             toast("login successful")
-            navigate('/')
+            navigate(location.state? location.state : '/')
         })
         .catch(err => {
             console.log(err.message);
             toast(err.message)
         })
     }
+
+    const handlegoogle = ()=> {
+      googleLogin()
+      .then(res => {
+        console.log(res);
+        toast('login successful')
+        navigate(location.state ? location.state : "/");
+      })
+      .catch(err => {
+        console.log(err.message);
+      })
+    }
+
+
   return (
     <>
       <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
@@ -38,7 +53,7 @@ const Login = () => {
             <div className="mt-12 flex flex-col items-center">
               <div className="w-full flex-1 mt-8">
                 <div className="flex flex-col items-center">
-                  <button className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-green-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
+                  <button onClick={handlegoogle} className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-green-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                     <div className="bg-white p-2 rounded-full">
                       <svg className="w-4" viewBox="0 0 533.5 544.3">
                         <path

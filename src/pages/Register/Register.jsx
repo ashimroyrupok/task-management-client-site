@@ -4,18 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { AuthContext } from "../../provider/AuthProvider/AuthProvider";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const api_key = import.meta.env.VITE_IMAGE_API_KEY;
 const hosting_api = `https://api.imgbb.com/1/upload?key=${api_key}`;
 
 const Register = () => {
-
-
   const [visible, setVisible] = useState(false);
-  const { signIn } = useContext(AuthContext);
+  const { signIn, update } = useContext(AuthContext);
   const axiosPublic = useAxiosPublic();
-  const navigate =useNavigate()
+  const navigate = useNavigate();
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -36,31 +34,43 @@ const Register = () => {
       },
     });
     console.log(res.data);
+    const image = res.data.data.display_url;
     if (res.data.success) {
-      signIn(email, password)
-        .then((res) => {
-          console.log(res);
-         toast("sign in successful!", {
-           position: "top-right",
-           autoClose: 5000,
-           hideProgressBar: false,
-           closeOnClick: true,
-           pauseOnHover: true,
-           draggable: true,
-           progress: undefined,
-           theme: "light",
-         });
-          navigate('/login')
+      const info = {
+        name,
+        email,
+        password,
+        image: res.data.data.display_url,
+      };
 
+      signIn(email, password)
+        .then(async (response) => {
+          console.log(response);
+
+          const result = await axiosPublic.post("/users", info);
+          console.log(result.data);
+
+          if (result.data.insertedId) {
+            console.log(name,image,"updateeeee");
+            
+            update(name, image)
+            .then(() => {
+              toast("sign in successful!");
+              console.log(result);
+              navigate("/login");
+            })
+            .catch(error => {
+              toast(error.message)
+              console.log(error.message);
+            })
+          }
         })
         .catch((err) => {
           console.log(err.message);
-         toast(`${err.message}`);
+          toast(`${err.message}`);
         });
-    }
-    else{
-        toast.error("try with another image");
-
+    } else {
+      toast.error("try with another image");
     }
     // toast("try with another image")
   };

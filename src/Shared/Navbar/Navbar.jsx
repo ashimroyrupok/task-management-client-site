@@ -1,8 +1,14 @@
 import { Link, NavLink } from "react-router-dom";
-import "./Navbar.css"
+import "./Navbar.css";
 import { CiLogin } from "react-icons/ci";
+import { useContext } from "react";
+import { AuthContext } from "../../provider/AuthProvider/AuthProvider";
 const Navbar = () => {
-  
+  const { user, logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <div className="navbar fixed z-50 bg-transparent w-full mx-auto">
@@ -62,25 +68,53 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end pr-6">
-        <div className="flex justify-between items-center gap-2">
-          <Link to={'/login'}
-            href=""
-            className="btn text-white border-2 border-[#021745] hover:text-white hover:bg-[#021745] btn-outline"
-          >
-            {" "}
-            Login <CiLogin className="text-2xl font-extrabold  "></CiLogin>{" "}
-          </Link>
-          <Link
-            to={"/register"}
-            href=""
-            className="btn hidden lg:block text-white border-2 border-[#021745] hover:text-white bg-[#021745] btn-outline"
-          >
-            <div className="flex justify-center items-center pt-3">
-              SignUp <CiLogin className="text-xl font-extrabold  "></CiLogin>
+        {user ? (
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img alt="Tailwind CSS Navbar component" src={user?.photoURL} />
+              </div>
             </div>
-          </Link>
-          
-        </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-[#021947] rounded-box w-52"
+            >
+              <li>
+                <a className="justify-between">
+                  {user?.displayName}
+                  <span className="badge">New</span>
+                </a>
+              </li>
+              <li onClick={handleLogout}>
+                <a>Logout</a>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <div className="flex justify-between items-center gap-2">
+            <Link
+              to={"/login"}
+              href=""
+              className="btn text-white border-2 border-[#021745] hover:text-white hover:bg-[#021745] btn-outline"
+            >
+              {" "}
+              Login <CiLogin className="text-2xl font-extrabold  "></CiLogin>{" "}
+            </Link>
+            <Link
+              to={"/register"}
+              href=""
+              className="btn hidden lg:block text-white border-2 border-[#021745] hover:text-white bg-[#021745] btn-outline"
+            >
+              <div className="flex justify-center items-center pt-3">
+                SignUp <CiLogin className="text-xl font-extrabold  "></CiLogin>
+              </div>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
