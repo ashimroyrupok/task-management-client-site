@@ -3,7 +3,7 @@ import Banner from "../../components/Banner/Banner";
 
 const Landing = () => {
     return (
-        <div>
+        <div className="max-w-7xl">
             <Navbar></Navbar>
             <Banner></Banner>
         </div>
