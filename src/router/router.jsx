@@ -1,9 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
+import Mainlayout from "../layout/Mainlayout/Mainlayout";
+import Landing from "../pages/Landing/Landing";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Hello world!</div>,
+    element: <Mainlayout></Mainlayout>,
+    children:[
+        {
+            path: "/",
+            element:<Landing></Landing>
+        }
+    ]
   },
 ])
 

@@ -1,7 +1,10 @@
+import { Outlet } from "react-router-dom";
 
 const Mainlayout = () => {
     return (
-        <div>
+        <div className="bg-gradient-to-tr from-[#021441] to-[#02679F] text-white">
+
+            <Outlet></Outlet>
             
         </div>
     );
