@@ -1,42 +1,69 @@
-import  { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 // react icons
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import  { AuthContext } from "../../provider/AuthProvider/AuthProvider";
-
+import { AuthContext } from "../../provider/AuthProvider/AuthProvider";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import {  toast } from "react-toastify";
 
 const api_key = import.meta.env.VITE_IMAGE_API_KEY;
 const hosting_api = `https://api.imgbb.com/1/upload?key=${api_key}`;
 
 const Register = () => {
+
+
   const [visible, setVisible] = useState(false);
+  const { signIn } = useContext(AuthContext);
+  const axiosPublic = useAxiosPublic();
+  const navigate =useNavigate()
 
-  const { signIn } = useContext(AuthContext)
-  console.log(signIn);
-
-
-
-  const submitForm= e => {
-    e.preventDefault()
+  const submitForm = async (e) => {
+    e.preventDefault();
     const form = e.target;
     const name = form.username.value;
     const email = form.email.value;
     const password = form.password.value;
     const bio = form.bio.value;
-    const img= form.img.files[0]
-    console.log(name,email,password,bio,img);
+    const img = form.img.files[0];
+    console.log(name, email, password, bio, img);
 
-    // 
+    // hosting image
+    const imageFile = { image: img };
 
-    signIn(email,password)
-    .then(res => {
-        console.log(res);
-    })
-    .catch(err => {
-       console.log(err.message);
-    })
+    const res = await axiosPublic.post(hosting_api, imageFile, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
+    console.log(res.data);
+    if (res.data.success) {
+      signIn(email, password)
+        .then((res) => {
+          console.log(res);
+         toast("sign in successful!", {
+           position: "top-right",
+           autoClose: 5000,
+           hideProgressBar: false,
+           closeOnClick: true,
+           pauseOnHover: true,
+           draggable: true,
+           progress: undefined,
+           theme: "light",
+         });
+          navigate('/login')
 
-  }
+        })
+        .catch((err) => {
+          console.log(err.message);
+         toast(`${err.message}`);
+        });
+    }
+    else{
+        toast.error("try with another image");
+
+    }
+    // toast("try with another image")
+  };
   return (
     <div>
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-4 sm:px-6 lg:px-8 dark:bg-[#060B13] max-w-[1200px] mx-auto">
@@ -157,8 +184,6 @@ const Register = () => {
                 >
                   Submit
                 </button>
-
-    
               </div>
               <div className="flex">
                 <h4>Already have an account?</h4>
@@ -171,6 +196,7 @@ const Register = () => {
               </div>
             </form>
           </div>
+          {/* <ToastContainer /> */}
         </div>
       </div>
     </div>

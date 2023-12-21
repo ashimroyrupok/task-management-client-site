@@ -1,17 +1,36 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../provider/AuthProvider/AuthProvider";
+import { toast } from "react-toastify";
 
 const Login = () => {
+    const {login} = useContext(AuthContext);
+    const navigate = useNavigate()
+    const handleForm = e => {
+        e.preventDefault()
+        const form = e.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        console.log(email,password);
+
+        login(email,password)
+        .then(res => {
+            console.log(res.data);
+            toast("login successful")
+            navigate('/')
+        })
+        .catch(err => {
+            console.log(err.message);
+            toast(err.message)
+        })
+    }
   return (
     <>
-      {/* source:https://codepen.io/owaiswiz/pen/jOPvEPB */}
       <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
         <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
           <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
             <div>
-              {/* <img
-                src="https://drive.google.com/uc?export=view&id=1MFiKAExRFF0-2YNpAZzIu1Sh52J8r16v"
-                className="w-mx-auto"
-              /> */}
+             
               <h2 className="text-3xl font-bold text-center">
                 Login Task Management
               </h2>
@@ -48,15 +67,17 @@ const Login = () => {
                     Or sign In with Cartesian E-mail
                   </div>
                 </div>
-                <div className="mx-auto max-w-xs">
+                <form  onSubmit={handleForm} className="mx-auto max-w-xs">
                   <input
                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     type="email"
+                    name="email"
                     placeholder="Email"
                   />
                   <input
                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                     type="password"
+                    name="password"
                     placeholder="Password"
                   />
                   <button className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
@@ -83,7 +104,7 @@ const Login = () => {
                       Sign in
                     </Link>
                   </p>
-                </div>
+                </form>
               </div>
             </div>
           </div>
