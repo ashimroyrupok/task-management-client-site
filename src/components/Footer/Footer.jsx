@@ -2,7 +2,7 @@
 
 const Footer = () => {
   return (
-    <div className=" bg-[#022150] py-8 flex  justify-center items-center mt-10 w-full mx-auto">
+    <div className=" bg-[#022150] py-8 lg:ml-10 flex  justify-center items-center mt-10 w-full mx-auto">
       <div className="text-center">
         <a
           href="#"
