@@ -6,7 +6,7 @@ import Login from "../pages/Login/Login";
 import Errorpage from "../pages/Errorpage/Errorpage";
 import Dashboard from "../layout/Dashboard/Dashboard";
 import PrivateRoute from "../route/PrivateRoute";
-import AddTask from "../layout/Dashboard/addTask/addTask";
+import AddTask from "../layout/Dashboard/manageTask/ManageTask";
 
 const router = createBrowserRouter([
   {
@@ -29,9 +29,8 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "addTask",
-        element: <AddTask></AddTask>,
-      },
+    
+      }
     ],
   },
   {
