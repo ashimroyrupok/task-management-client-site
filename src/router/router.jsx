@@ -7,6 +7,7 @@ import Errorpage from "../pages/Errorpage/Errorpage";
 import Dashboard from "../layout/Dashboard/Dashboard";
 import PrivateRoute from "../route/PrivateRoute";
 import AddTask from "../layout/Dashboard/manageTask/ManageTask";
+import Contact from "../pages/Contact/Contact";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <Landing></Landing>,
       },
+      {
+        path:"/contact",
+        element: <Contact></Contact>
+      }
     ],
   },
   {

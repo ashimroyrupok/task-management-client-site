@@ -17,7 +17,11 @@ const Banner = () => {
                 task
               </p>
 
-              <Link to={'/dashboard'}  className="btn bg-[#021745]  px-10 py-4 hover:text-black text-white mt-8">
+              <Link
+                to={"/dashboard"}
+                data-aos="flip-left"
+                className="btn bg-[#021745]  px-10 py-4 hover:text-black text-white mt-8"
+              >
                 Lets Explore
               </Link>
             </div>
@@ -27,6 +31,7 @@ const Banner = () => {
           <div className="flex justify-start items-start ">
             <div className="  relative ">
               <img
+                data-aos="flip-left"
                 className="w-80 px-2"
                 src="https://i.ibb.co/qsLwkjf/woman-placing-sticky-notes-wall.jpg"
                 alt=""

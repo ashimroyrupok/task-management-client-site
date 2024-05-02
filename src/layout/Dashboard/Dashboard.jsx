@@ -11,9 +11,17 @@ import { useQuery } from "@tanstack/react-query";
 
 const Dashboard = () => {
     const {user} = useContext(AuthContext)
-    //  const { user } = useContext(AuthContext);
      const axiosPublic = useAxiosPublic();
 
+     const { data = [], refetch:dataFetch } = useQuery({
+       queryKey: [user?.email],
+       queryFn: async () => {
+         const res = await axiosPublic.get(`taskData/${user?.email}`);
+         return res.data;
+       },
+     });
+
+    //  
      const { data: tasks = [], refetch } = useQuery({
        queryKey: [user?.email],
        queryFn: async () => {
@@ -21,15 +29,22 @@ const Dashboard = () => {
          return res.data;
        },
      });
-     const { data: taskOngoing = [] } = useQuery({
+     const { data: taskOngoing = [],refetch:ongoingFetch } = useQuery({
        queryKey: [user?.email,"taskOngoing"],
        queryFn: async () => {
          const res = await axiosPublic.get(`tasks/onGoing/${user?.email}`);
          return res.data;
        },
      });
+     const { data: taskComplete = [],refetch:completeFetch } = useQuery({
+       queryKey: [user?.email,"taskComplete"],
+       queryFn: async () => {
+         const res = await axiosPublic.get(`tasks/complete/${user?.email}`);
+         return res.data;
+       },
+     });
 
-     console.log(taskOngoing , "alkdsjlkjsdflfasflkdf");
+     console.log(taskComplete , "alkdsjlkjsdflfasflkdf");
     //  console.log(tasks);
   return (
     <div className="">
@@ -188,7 +203,12 @@ const Dashboard = () => {
                     className="modal modal-bottom sm:modal-middle"
                   >
                     <div className="modal-box">
-                      <MakeTask refetch={refetch}></MakeTask>
+                      <MakeTask
+                        refetch={refetch}
+                        ongoingFetch={ongoingFetch}
+                        completeFetch={completeFetch}
+                        dataFetch={dataFetch}
+                      ></MakeTask>
                       <div className="modal-action">
                         <form method="dialog">
                           {/* if there is a button in form, it will close the modal */}
@@ -212,7 +232,10 @@ const Dashboard = () => {
             <div className="p-10">
               {/* <CreateTask /> */}
 
-              <ManageTask tasks={tasks} taskOngoing={taskOngoing}></ManageTask>
+              <ManageTask
+                data={data}
+                dataFetch={dataFetch}
+              ></ManageTask>
             </div>
           </div>
         </div>

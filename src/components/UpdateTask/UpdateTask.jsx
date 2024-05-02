@@ -1,13 +1,9 @@
-import { useForm } from "react-hook-form";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
-import { useContext } from "react";
-import { AuthContext } from "../../provider/AuthProvider/AuthProvider";
+
 import { toast } from "react-toastify";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { useForm } from "react-hook-form";
 
-const MakeTask = ({  dataFetch }) => {
-  const { user } = useContext(AuthContext);
-  console.log(user.email);
-
+const UpdateTask = ({ forUpdate, dataFetch }) => {
   const axiosPublic = useAxiosPublic();
 
   const {
@@ -19,27 +15,28 @@ const MakeTask = ({  dataFetch }) => {
     // console.log(data);
 
     const info = {
-      email: user?.email,
       taskName: data.taskName,
       taskStatus: data.taskStatus,
       priority: data.priority,
       deadline: data.deadline,
       description: data.description,
-      order: 1,
     };
     console.log(info);
-    const res = await axiosPublic.post("/task", info);
+    const res = await axiosPublic.patch(
+      `task/updateNow/${forUpdate?._id}`,
+      info
+    );
     console.log(res.data);
-    toast("task added successfully");
+    toast("task updated successfully");
     // refetch();
     // ongoingFetch();
     // completeFetch();
+    data.reset();
     dataFetch();
   };
-
   return (
     <div className="card shrink-0 w-full max-w-sm  bg-transparent">
-      <h2 className="font-semibold text-3xl">Add your new Task</h2>
+      <h2 className="font-semibold text-3xl">Update your new Task</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="card-body">
         <div className="form-control">
           <label className="label">
@@ -47,7 +44,7 @@ const MakeTask = ({  dataFetch }) => {
           </label>
           <input
             type="text"
-            // placeholder="email"
+            defaultValue={forUpdate?.taskName}
             name="taskName"
             className="input input-bordered"
             {...register("taskName", { required: true })}
@@ -66,14 +63,15 @@ const MakeTask = ({  dataFetch }) => {
             // onChange={handleStatusChange} // Fix: Use a function here
             // value={selectedStatus} // Optionally set the value if needed
             className="select w-full border-2 border-gray-400 max-w-xs"
-            defaultValue={"toDo"}
+            defaultValue={"todo"}
             {...register("taskStatus", { required: true })}
           >
             <option disabled defaultValue>
               Pick up your task status
             </option>
-            <option value={"todo"}>To-Do</option>
+            <option value={"todo"}>todo</option>
             <option value={"ongoing"}>On Going</option>
+            <option value={"completed"}>complete</option>
           </select>
         </div>
         {/* time and priority */}
@@ -104,6 +102,7 @@ const MakeTask = ({  dataFetch }) => {
               type="date"
               // placeholder="email"
               name="deadline"
+              defaultValue={forUpdate?.deadline}
               className="input input-bordered"
               {...register("deadline", { required: true })}
             />
@@ -118,6 +117,7 @@ const MakeTask = ({  dataFetch }) => {
           </label>
           <textarea
             name="description"
+            defaultValue={forUpdate?.description}
             className="textarea textarea-bordered"
             placeholder="Bio"
             {...register("description", { required: true })}
@@ -130,7 +130,7 @@ const MakeTask = ({  dataFetch }) => {
 
         <div className="form-control mt-6">
           <button className="btn btn-outline text-white bg-[#021B48]">
-            Create
+            Update
           </button>
         </div>
       </form>
@@ -138,4 +138,4 @@ const MakeTask = ({  dataFetch }) => {
   );
 };
 
-export default MakeTask;
+export default UpdateTask;
